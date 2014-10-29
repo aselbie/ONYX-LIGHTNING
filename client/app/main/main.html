@@ -35,8 +35,8 @@
 
 
       <ul class="main-menu" ng-class="{expanded: expandedSwitch}">
-        <li class="menu-item" ng-repeat="article in news | limitTo: 15">
-          <a ng-controller="MapCtrl" ng-init="zoomToCountry($first)" ng-click="zoomToCountry()" ui-sref=".article({index: $index})">• {{article.title}}</a>
+        <li class="menu-item" ng-repeat="article in news | limitTo: 20 | orderBy: '-votes'">
+          <a ng-controller="MapCtrl" ng-init="zoomToCountry($first)" ng-click="zoomToCountry()" ui-sref=".article({index: $index})">{{article.votes}} Votes: {{article.title}}</a>
         </li>
       </ul>
     </div>
