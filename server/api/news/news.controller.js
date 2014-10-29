@@ -32,6 +32,7 @@ setInterval(function(){
       destroy(article._id);
     })
   });
+<<<<<<< HEAD
   
   // destroyAll(function(){
   //
@@ -48,14 +49,12 @@ setInterval(function(){
 function createArticle(newArticle) {
   News.create(newArticle, function(err, article){
     if (err) {
-      // console.log(err)
-      ;
+      console.log(err);
     } else {
-      // console.log(newArticle);
-      ;
+      console.log(newArticle);
     }
-  });
-};
+  })
+}
 
 function upvote(req, res){
   News.findOne({_id: req.params.id}, function(err, article) {
