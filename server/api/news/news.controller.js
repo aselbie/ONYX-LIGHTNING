@@ -14,7 +14,8 @@ var News = require('./news.model.js');
 
 module.exports = {
   createArticle: createArticle,
-  saveArticle: saveArticle,
+  upvote: upvote,
+  downvote: downvote,
   index: index,
   show: show,
   destroy: destroy,
@@ -33,7 +34,7 @@ setInterval(function(){
 
   });
   // saveArticle();
-}, 1800000);
+}, 180000);
   
 // ############ Functions: ###################
 

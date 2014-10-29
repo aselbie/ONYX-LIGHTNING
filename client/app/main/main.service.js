@@ -20,7 +20,7 @@
       return $http.get('/api/news');
     }
     function put(){
-      $http.put('/api/news');
+      $http.put('/api/news/upvote');
     }
   }
 
