@@ -9,7 +9,8 @@
   function MainFactory($http) {
 
     var instance = {
-      get:get
+      get:get,
+      put:put
     }
     return instance;
 
@@ -17,6 +18,9 @@
 
     function get(){
       return $http.get('/api/news');
+    }
+    function put(){
+      $http.put('/api/news');
     }
   }
 
