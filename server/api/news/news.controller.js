@@ -26,15 +26,21 @@ module.exports = {
 newsAggregator.fetchArticles(createArticle);
 
 setInterval(function(){
-
-  destroyAll(function(){
-
-    newsAggregator.fetchArticles(createArticle);
-    console.log("### New Articles Fetched");
-
+  
+  findAll(function(lowVoteArticles){
+    _.each(lowVoteArticles, function(article){
+      destroy(article._id);
+    })
   });
-  // saveArticle();
+  
+  // destroyAll(function(){
+  //
+  newsAggregator.fetchArticles(createArticle);
+  console.log("### New Articles Fetched");
+  //
+  // });
 }, 180000);
+
 // ############ Functions: ###################
 
 // Create Unique article in DB (uniqueness is determined by the url)
@@ -60,7 +66,7 @@ function upvote(req, res){
 }
 
 function downvote(req, res){
-  News.findOne(req.params.id, function(err, article){
+  News.findOne({_id: req.params.id}, function(err, article){
     article.votes--;
     article.save(function(err){
       if (err){ return handleError(res, err); }
@@ -90,18 +96,30 @@ function show(req, res) {
 
 // Deletes a thing from the DB.
 function destroy(req, res) {
-  News.findById(req.params.id, function (err, news) {
+  News.findOne({_id: req}, function (err, news) {
     if(err) { return handleError(res, err); }
-    if(!news) { return res.send(404); }
-    news.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
+    // if(!news) { return res.send(404); }
+    News.remove({_id: news._id}, function(){
+      console.log('hit');
     });
+      // return res.send(204);
   });
 };
 
 function handleError(res, err) {
   return res.send(500, err);
+}
+
+function findAll(callback){
+  var lowVotes = [];
+  News.find(function(err, news){
+    _.forEach(news, function(newsItem){
+      if (newsItem.votes === 0) {
+        lowVotes.push(newsItem);
+      }
+    })
+    callback(lowVotes);
+  })
 }
 
 function destroyAll(callback){
