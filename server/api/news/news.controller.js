@@ -35,7 +35,6 @@ setInterval(function(){
   });
   // saveArticle();
 }, 180000);
-  
 // ############ Functions: ###################
 
 // Create Unique article in DB (uniqueness is determined by the url)
@@ -43,14 +42,12 @@ setInterval(function(){
 function createArticle(newArticle) {
   News.create(newArticle, function(err, article){
     if (err) {
-      // console.log(err)
-      ;
+      console.log(err);
     } else {
-      // console.log(newArticle);
-      ;
+      console.log(newArticle);
     }
-  });
-};
+  })
+}
 
 function upvote(req, res){
   News.findOne({_id: req.params.id}, function(err, article) {

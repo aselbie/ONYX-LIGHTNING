@@ -35,6 +35,7 @@
 
 
       <ul class="main-menu" ng-class="{expanded: expandedSwitch}">
+        <!-- a possible place to start ordering by upvotes and downvotes -->
         <li class="menu-item" ng-repeat="article in news | limitTo: 15">
           <a ng-controller="MapCtrl" ng-init="zoomToCountry($first)" ng-click="zoomToCountry()" ui-sref=".article({index: $index})">• {{article.title}}</a>
         </li>
@@ -48,7 +49,7 @@
     <article class="post">
       <!-- <div class="post-thumbnail">{{Country}}</div> -->
       <div class="map" ui-view="map">
-       
+
       </div>
       <!-- <div ui-view="map"></div> -->
       <div class="content-wrapper">
