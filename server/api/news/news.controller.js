@@ -14,6 +14,8 @@ var News = require('./news.model.js');
 
 module.exports = {
   createArticle: createArticle,
+  upvote: upvote,
+  downvote: downvote,
   index: index,
   show: show,
   destroy: destroy,
@@ -26,13 +28,13 @@ newsAggregator.fetchArticles(createArticle);
 setInterval(function(){
 
   destroyAll(function(){
-    
+
     newsAggregator.fetchArticles(createArticle);
     console.log("### New Articles Fetched");
 
   });
-
-}, 1800000);
+  // saveArticle();
+}, 180000);
   
 // ############ Functions: ###################
 
@@ -48,6 +50,26 @@ function createArticle(newArticle) {
       ;
     }
   });
+};
+
+function upvote(req, res){
+  News.findOne({_id: req.params.id}, function(err, article) {
+    article.votes++;
+    article.save(function(err) {
+      if (err){ return handleError(res, err); }
+      return res.json({votes:article.votes});
+    });
+  })
+}
+
+function downvote(req, res){
+  News.findOne(req.params.id, function(err, article){
+    article.votes--;
+    article.save(function(err){
+      if (err){ return handleError(res, err); }
+      return res.json({votes:article.votes});
+    });
+  })
 }
 
 
@@ -93,4 +115,3 @@ function destroyAll(callback){
     callback();
   });
 }
-

@@ -7,6 +7,8 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
+router.put('/upvote/:id', controller.upvote);
+router.put('/downvote/:id', controller.downvote);
 router.delete('/:id', controller.destroy);
 
 module.exports = router;

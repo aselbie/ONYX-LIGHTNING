@@ -9,7 +9,7 @@
   function MainFactory($http) {
 
     var instance = {
-      get:get
+      get:get,
     }
     return instance;
 
