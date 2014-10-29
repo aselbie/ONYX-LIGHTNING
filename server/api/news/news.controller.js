@@ -32,7 +32,6 @@ setInterval(function(){
       destroy(article._id);
     })
   });
-<<<<<<< HEAD
   
   // destroyAll(function(){
   //
