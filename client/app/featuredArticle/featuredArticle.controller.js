@@ -11,12 +11,14 @@
   function ArticleCtrl($scope, $stateParams, $http) {
     $scope.index = $stateParams.index || 0;
     $scope.upvote = function(){
-      $http.put('/api/news/upvote/' + $scope.news[$scope.index]._id).success(function(){
-        $scope.news[$scope.index].votes++;
+      $http.put('/api/news/upvote/' + $scope.news[$scope.index]._id).success(function(data){
+        $scope.news[$scope.index].votes = data.votes;
       });
     }
     $scope.downvote = function(){
-      $http.put('/api/news/downvote/' + $scope.news[$scope.index]._id);      
+      $http.put('/api/news/downvote/' + $scope.news[$scope.index]._id).success(function(data){
+        $scope.news[$scope.index].votes = data.votes;
+      });      
     }
   }
 

@@ -53,12 +53,11 @@ function createArticle(newArticle) {
 };
 
 function upvote(req, res){
-  News.findOne(req.params.id, function(err, article) {
+  News.findOne({_id: req.params.id}, function(err, article) {
     article.votes++;
-    console.log(article.votes);
     article.save(function(err) {
       if (err){ return handleError(res, err); }
-      return res.send(200);
+      return res.json({votes:article.votes});
     });
   })
 }
@@ -68,7 +67,7 @@ function downvote(req, res){
     article.votes--;
     article.save(function(err){
       if (err){ return handleError(res, err); }
-      return res.send(200);
+      return res.json({votes:article.votes});
     });
   })
 }
