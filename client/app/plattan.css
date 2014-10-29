@@ -651,7 +651,7 @@ table {
  * @since Plattan 1.0
  */
 body {
-/*  background: #fafaf9;*/
+  background: rgb(220,220,220);
   color: #111111; }
 
 a {
@@ -838,7 +838,6 @@ h4, h5, h6 {
       float: left;
       margin-right: 0%;
       width: 41.66667%;
-      position: fixed;
       top: 0em;
       bottom: 0em;
       left: 0em; }
@@ -1163,6 +1162,7 @@ ul.main-menu.expanded {
   -webkit-animation-delay: 0.8s;
   -moz-animation-delay: 0.8s;
   animation-delay: 0.8s;*/
+  background: #fff;
   display: block;
   float: left;
   margin-right: 0%;
@@ -1176,7 +1176,7 @@ ul.main-menu.expanded {
       float: left;
       margin-right: 0%;
       width: 58.33333%;
-      margin-left: 41.66667%; }
+      margin-left: 0; }
       .page-content:last-child {
         margin-right: 0; } }
   @media screen and (min-width: 1024px) {
@@ -1185,7 +1185,7 @@ ul.main-menu.expanded {
       float: left;
       margin-right: 0%;
       width: 66.66667%;
-      margin-left: 33.33333%; }
+      margin-left: 0; }
       .page-content:last-child {
         margin-right: 0; } }
 
