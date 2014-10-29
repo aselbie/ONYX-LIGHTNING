@@ -55,14 +55,21 @@ function createArticle(newArticle) {
 function upvote(req, res){
   News.findOne(req.params.id, function(err, article) {
     article.votes++;
-    article.save();
+    console.log(article.votes);
+    article.save(function(err) {
+      if (err){ return handleError(res, err); }
+      return res.send(200);
+    });
   })
 }
 
 function downvote(req, res){
   News.findOne(req.params.id, function(err, article){
     article.votes--;
-    article.save();
+    article.save(function(err){
+      if (err){ return handleError(res, err); }
+      return res.send(200);
+    });
   })
 }
 
