@@ -52,6 +52,7 @@ exports.fetchArticles = function(data, callback) {
         newItem.location = utils.getLocation(item.summary);
         newItem.info = item.summary;
         newItem.votes = 0;
+        newItem.rank = 0;
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
 

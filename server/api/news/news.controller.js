@@ -46,31 +46,31 @@ var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 
 // ############ Functions: ###################
 
-function calculateScore(article){
-  var vote = article.votes;
-  var date = new Date(article.date);
-  var current = new Date;
-  
-  var timeDiff = Math.ceil(Math.abs(current.getTime() - date.getTime())/1000);
-
-  var order = Math.max(Math.log(Math.abs(vote)));
-  console.log('order:', order);
-  var sign = vote > 0 ? 1 : vote < 0 ? -1 : 0;
-  console.log('sign:', sign);
-  var articleScore = Math.floor(order + sign * timeDiff / 45000)
-  console.log('score:', articleScore);
-    
-}
+// function calculateScore(article){
+//   var vote = article.votes;
+//   var date = new Date(article.date);
+//   var current = new Date;
+//
+//   var timeDiff = Math.ceil(Math.abs(current.getTime() - date.getTime())/1000);
+//
+//   var order = Math.max(Math.log(Math.abs(vote)));
+//   console.log('order:', order);
+//   var sign = vote > 0 ? 1 : vote < 0 ? -1 : 0;
+//   console.log('sign:', sign);
+//   var articleScore = Math.floor(order + sign * timeDiff / 45000)
+//   console.log('score:', articleScore);
+//
+// }
 
 function upvote(req, res){
   News.findOne({_id: req.params.id}, function(err, article) {
     article.votes++;
     
-    calculateScore(article);
-    
-    article.save(function(err) {
-      if (err){ return handleError(res, err); }
-      return res.json({votes:article.votes});
+    ranking.calculateScore(article, function(newArticle){
+      newArticle.save(function(err){
+        if (err){ return handleError(res, err); }
+        return res.json({votes:article.votes});
+      });      
     });
   })
 }
@@ -78,9 +78,12 @@ function upvote(req, res){
 function downvote(req, res){
   News.findOne({_id: req.params.id}, function(err, article){
     article.votes--;
-    article.save(function(err){
-      if (err){ return handleError(res, err); }
-      return res.json({votes:article.votes});
+    
+    ranking.calculateScore(article, function(newArticle){
+      newArticle.save(function(err){
+        if (err){ return handleError(res, err); }
+        return res.json({votes:article.votes});
+      });      
     });
   })
 }

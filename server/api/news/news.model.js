@@ -8,6 +8,7 @@ var NewsSchema = new Schema({
   info: String,
   location: Array,
   votes: Number,
+  rank: Number,
   sentiment: Object,
   url: {
     type: String,
