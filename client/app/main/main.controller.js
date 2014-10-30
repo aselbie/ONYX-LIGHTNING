@@ -38,7 +38,9 @@
           // or server returns response with an error status.
         });      
     }  
+    
     getArticles();
+    
     setInterval(function(){
       getArticles();
     }, 10000);

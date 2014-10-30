@@ -27,13 +27,10 @@ newsAggregator.fetchArticles(createArticle);
 
 setInterval(function(){
   
-  // destroyAll(function(){
-
   newsAggregator.fetchArticles(createArticle);
   console.log("### New Articles Fetched");
   
   destroyLowScores();
-  // });
 }, 10000);
 
 // ############ Functions: ###################
@@ -93,10 +90,7 @@ function show(req, res) {
 function destroy(req, res) {
   News.findOne({_id: req}, function (err, news) {
     if(err) { return handleError(res, err); }
-    
-    News.remove({_id: news._id}, function(){
-      console.log('hit');
-    });
+    News.remove({_id: news._id});
   });
 };
 
@@ -105,9 +99,9 @@ function handleError(res, err) {
 }
 
 function destroyLowScores(callback){
-  var lowScoreArticles = [];
   var count = 0;
   News.find(function(err, news){
+    news.sort(function(a, b) {return b.votes - a.votes});
     _.forEach(news, function(newsItem){
       count++;
       if (count >= 20) {
