@@ -8,47 +8,43 @@
  */
 
 'use strict';
+var Bluebird = require('bluebird');
 var newsAggregator = require('./../../components/news_aggregator/news.aggregator.js');
+var ranking = require('./../../components/ranking/ranking.js');
 var _ = require('lodash');
 var News = require('./news.model.js');
 
 module.exports = {
-  createArticle: createArticle,
   upvote: upvote,
   downvote: downvote,
   index: index,
   show: show,
-  destroy: destroy,
   destroyAll: destroyAll
 };
 
-// Fill Database with Yahoo data
-newsAggregator.fetchArticles(createArticle);
+var fetchArticles = Bluebird.promisify(newsAggregator.fetchArticles);
+var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 
-setInterval(function(){
-  
-  // destroyAll(function(){
+(function refresh() {
 
-  newsAggregator.fetchArticles(createArticle);
-  console.log("### New Articles Fetched");
-  
-  destroyLowScores();
-  // });
-}, 10000);
+  // Grab articles from APIs (Currently only Yahoo is implemented)
+  fetchArticles(null, function(){
+
+    // Grab all current news articles from DB
+    News.find({}, function(err, articles){
+
+      // Remove least relevant articles from the database
+      destroyLowScores(articles)
+      .then(function(articles) {
+        console.log('articles.length: %s', articles.length);
+      })
+      
+    })
+  });
+  setTimeout(refresh, 10000);
+})(); // IIFE Baby!
 
 // ############ Functions: ###################
-
-// Create Unique article in DB (uniqueness is determined by the url)
-// This function is meant to be a callback for fetchArticles() in parseRSS.js
-function createArticle(newArticle) {
-  News.create(newArticle, function(err, article){
-    if (err) {
-      // console.log(err);
-    } else {
-      console.log(newArticle);
-    }
-  })
-}
 
 function upvote(req, res){
   News.findOne({_id: req.params.id}, function(err, article) {
@@ -88,33 +84,8 @@ function show(req, res) {
   });
 };
 
-
-// Deletes a thing from the DB.
-function destroy(req, res) {
-  News.findOne({_id: req}, function (err, news) {
-    if(err) { return handleError(res, err); }
-    
-    News.remove({_id: news._id}, function(){
-      console.log('hit');
-    });
-  });
-};
-
 function handleError(res, err) {
   return res.send(500, err);
-}
-
-function destroyLowScores(callback){
-  var lowScoreArticles = [];
-  var count = 0;
-  News.find(function(err, news){
-    _.forEach(news, function(newsItem){
-      count++;
-      if (count >= 20) {
-        destroy(newsItem);
-      }
-    });
-  });
 }
 
 function destroyAll(callback){

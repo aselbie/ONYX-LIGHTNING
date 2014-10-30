@@ -3,14 +3,15 @@ var request = require('request');
 var apiMap = require('./news.source.config.js');
 var utils = require('./news.aggregator.utils.js');
 var sentiment = require('sentiment');
+var News = require('./../../api/news/news.model.js');
 
-exports.fetchArticles = function(dbCallback) {
+exports.fetchArticles = function(data, callback) {
   for (var key in apiMap) {
     console.log(key);
-    fetchSingleApi(apiMap[key]);
+    fetchSingleApi(apiMap[key], callback);
   }
 
-  function fetchSingleApi (api) {
+  function fetchSingleApi (api, callback) {
     var req = request(api.url);
     var feedparser = new FeedParser();
 
@@ -44,6 +45,7 @@ exports.fetchArticles = function(dbCallback) {
       // **NOTE** the "meta" is always available in the context of the feedparser instance
       var meta = this.meta;
       var item;
+
       while (item = stream.read()) {
         var newItem = {};
         newItem.title = item.title;
@@ -52,8 +54,16 @@ exports.fetchArticles = function(dbCallback) {
         newItem.votes = 0;
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
-        dbCallback(newItem);
+
+        // Create Unique article in DB (uniqueness is determined by the url)
+        // This function is meant to be a callback for fetchArticles() in parseRSS.js
+        News.create(newItem, function(){});
       }
+
+    });
+
+    feedparser.on('end', function() {
+      callback(null);
     });
   }
 
