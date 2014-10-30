@@ -16,11 +16,18 @@
     setInterval(function(){
       MainFactory.get().
         success(function(data, status, headers, config) {
+          var scopeLength = $scope.news.length;
           for (var i = 0; i < data.length; i ++) {
             if (!$scope.news[i]) {
               $scope.news.push(data[i]);
             }
           }
+          if ($scope.news.length !== scopeLength) {
+            $scope.news.sort(function(a, b) {
+              return b.votes - a.votes;
+            })            
+          };
+
         }).
         error(function(data, status, headers, config) {
           // console.log(data);

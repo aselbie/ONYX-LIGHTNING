@@ -27,17 +27,12 @@ newsAggregator.fetchArticles(createArticle);
 
 setInterval(function(){
   
-  // findLowScores(function(lowScores){
-  //   _.each(lowScores, function(article){
-  //     destroy(article._id);
-  //   })
-  // });
-  
   // destroyAll(function(){
 
   newsAggregator.fetchArticles(createArticle);
   console.log("### New Articles Fetched");
-
+  
+  destroyLowScores();
   // });
 }, 10000);
 
@@ -109,16 +104,17 @@ function handleError(res, err) {
   return res.send(500, err);
 }
 
-function findLowScores(callback){
+function destroyLowScores(callback){
   var lowScoreArticles = [];
+  var count = 0;
   News.find(function(err, news){
     _.forEach(news, function(newsItem){
-      if (newsItem.votes === 0) {
-        lowScoreArticles.push(newsItem);
+      count++;
+      if (count >= 20) {
+        destroy(newsItem);
       }
-    })
-    callback(lowScoreArticles);
-  })
+    });
+  });
 }
 
 function destroyAll(callback){
