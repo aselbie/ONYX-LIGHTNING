@@ -5,7 +5,6 @@ var utils = require('./news.aggregator.utils.js');
 var sentiment = require('sentiment');
 
 exports.fetchArticles = function(dbCallback) {
-
   for (var key in apiMap) {
     console.log(key);
     fetchSingleApi(apiMap[key]);
@@ -17,7 +16,7 @@ exports.fetchArticles = function(dbCallback) {
 
     req.on('error', function (error) {
       if (error) {
-        console.log(error);
+        // console.log(error);
       }
     });
     
@@ -35,7 +34,7 @@ exports.fetchArticles = function(dbCallback) {
     feedparser.on('error', function(error) {
       // always handle errors
       if (error) {
-        console.log(error);
+        console.log(error, 'parser error');
       }
     });
     
@@ -45,8 +44,7 @@ exports.fetchArticles = function(dbCallback) {
       // **NOTE** the "meta" is always available in the context of the feedparser instance
       var meta = this.meta;
       var item;
-
-      while (item === stream.read()) {
+      while (item = stream.read()) {
         var newItem = {};
         newItem.title = item.title;
         newItem.location = utils.getLocation(item.summary);

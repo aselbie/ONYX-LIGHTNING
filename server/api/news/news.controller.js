@@ -27,19 +27,19 @@ newsAggregator.fetchArticles(createArticle);
 
 setInterval(function(){
   
-  findAll(function(lowVoteArticles){
-    _.each(lowVoteArticles, function(article){
-      destroy(article._id);
-    })
-  });
+  // findLowScores(function(lowScores){
+  //   _.each(lowScores, function(article){
+  //     destroy(article._id);
+  //   })
+  // });
   
   // destroyAll(function(){
-  //
+
   newsAggregator.fetchArticles(createArticle);
   console.log("### New Articles Fetched");
-  //
+
   // });
-}, 180000);
+}, 10000);
 
 // ############ Functions: ###################
 
@@ -48,7 +48,7 @@ setInterval(function(){
 function createArticle(newArticle) {
   News.create(newArticle, function(err, article){
     if (err) {
-      console.log(err);
+      // console.log(err);
     } else {
       console.log(newArticle);
     }
@@ -98,11 +98,10 @@ function show(req, res) {
 function destroy(req, res) {
   News.findOne({_id: req}, function (err, news) {
     if(err) { return handleError(res, err); }
-    // if(!news) { return res.send(404); }
+    
     News.remove({_id: news._id}, function(){
       console.log('hit');
     });
-      // return res.send(204);
   });
 };
 
@@ -110,15 +109,15 @@ function handleError(res, err) {
   return res.send(500, err);
 }
 
-function findAll(callback){
-  var lowVotes = [];
+function findLowScores(callback){
+  var lowScoreArticles = [];
   News.find(function(err, news){
     _.forEach(news, function(newsItem){
       if (newsItem.votes === 0) {
-        lowVotes.push(newsItem);
+        lowScoreArticles.push(newsItem);
       }
     })
-    callback(lowVotes);
+    callback(lowScoreArticles);
   })
 }
 
