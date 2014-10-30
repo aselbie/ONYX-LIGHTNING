@@ -4,11 +4,11 @@
 
 .country:hover{
   stroke: #fff;
-  stroke-width: .3px;
+  stroke-width: .1px;
 }
 .articleCountry{
   stroke: #fff;
-  stroke-width: .3px;
+  stroke-width: .1px;
 
 }
 .text{

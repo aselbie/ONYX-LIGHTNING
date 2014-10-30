@@ -31,7 +31,6 @@ exports.fetchArticles = function(data, callback) {
         // console.log(error);
       }
     });
-    
     req.on('response', function (res) {
       var stream = this;
 
@@ -49,7 +48,7 @@ exports.fetchArticles = function(data, callback) {
         console.log(error, 'parser error');
       }
     });
-
+    
     feedparser.on('readable', function() {
       // This is where the action is!
       var stream = this;
@@ -62,8 +61,11 @@ exports.fetchArticles = function(data, callback) {
         newItem.title = item.title;
         newItem.location = utils.getLocation(item.summary);
         newItem.info = item.summary;
+<<<<<<< HEAD
         newItem.votes = 0;
         newItem.rank = startRank;
+=======
+>>>>>>> fixing news aggregator merge conflict
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
 
