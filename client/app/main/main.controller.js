@@ -21,6 +21,9 @@
               $scope.news.push(data[i]);
             }
           }
+          $scope.news.sort(function(a, b) {
+            return b.votes - a.votes;
+          })
         }).
         error(function(data, status, headers, config) {
           // console.log(data);
