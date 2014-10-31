@@ -4,11 +4,12 @@
 
 .country:hover{
   stroke: #fff;
-  stroke-width: .3px;
+  stroke-width: .1px;
+
 }
 .articleCountry{
   stroke: #fff;
-  stroke-width: .3px;
+  stroke-width: .1px;
 
 }
 .text{
@@ -21,7 +22,7 @@
   border-radius: 5px;
   height:100%;
   overflow:hidden;
-  background: #F0F8FF;
+  background-color: #880000;
 }
 .hidden {
   display: none;

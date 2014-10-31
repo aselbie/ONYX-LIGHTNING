@@ -31,7 +31,6 @@ exports.fetchArticles = function(data, callback) {
         // console.log(error);
       }
     });
-    
     req.on('response', function (res) {
       var stream = this;
 
@@ -49,7 +48,7 @@ exports.fetchArticles = function(data, callback) {
         console.log(error, 'parser error');
       }
     });
-
+    
     feedparser.on('readable', function() {
       // This is where the action is!
       var stream = this;
@@ -64,6 +63,7 @@ exports.fetchArticles = function(data, callback) {
         newItem.info = item.summary;
         newItem.votes = 0;
         newItem.rank = startRank;
+
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
 
