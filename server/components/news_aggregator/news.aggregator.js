@@ -61,11 +61,9 @@ exports.fetchArticles = function(data, callback) {
         newItem.title = item.title;
         newItem.location = utils.getLocation(item.summary);
         newItem.info = item.summary;
-<<<<<<< HEAD
         newItem.votes = 0;
         newItem.rank = startRank;
-=======
->>>>>>> fixing news aggregator merge conflict
+
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
 
