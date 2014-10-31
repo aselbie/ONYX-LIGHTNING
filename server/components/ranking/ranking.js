@@ -1,5 +1,6 @@
 module.exports = {
-  destroyLowScores: destroyLowScores
+  destroyLowScores: destroyLowScores,
+  calculateScore: calculateScore
 }
 
 var _ = require('lodash');
@@ -15,4 +16,21 @@ function destroyLowScores(articles, callback){
     }
   });
   callback(null, articles);
+}
+
+function calculateScore(article, callback){
+  var vote = article.votes;
+  var date = new Date(article.date);
+  var current = new Date;
+  
+  var timeDiff = Math.ceil(Math.abs(current.getTime() - date.getTime())/1000);
+
+  var order = Math.max(Math.log(Math.abs(vote)));
+  console.log('order:', order);
+  var sign = vote > 0 ? 1 : vote < 0 ? -1 : 0;
+  console.log('sign:', sign);
+  var articleScore = Math.floor(order + sign * timeDiff / 45000)
+  console.log('score:', articleScore);
+  article.rank = articleScore;
+  callback(article);
 }

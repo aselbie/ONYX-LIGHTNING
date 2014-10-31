@@ -6,11 +6,19 @@ var sentiment = require('sentiment');
 var News = require('./../../api/news/news.model.js');
 
 exports.fetchArticles = function(data, callback) {
-  for (var key in apiMap) {
-    console.log(key);
-    fetchSingleApi(apiMap[key], callback);
-  }
+  var startRank;
+  
+  News.find(function(err, news){
+    news.sort(function(a, b) {return b.votes - a.votes});  
+    
+    startRank = news[2].rank;
 
+    for (var key in apiMap) {
+      console.log(key);
+      fetchSingleApi(apiMap[key], callback);
+    }
+  });
+  
   function fetchSingleApi (api, callback) {
     var req = request(api.url);
     var feedparser = new FeedParser();
@@ -52,6 +60,7 @@ exports.fetchArticles = function(data, callback) {
         newItem.location = utils.getLocation(item.summary);
         newItem.info = item.summary;
         newItem.votes = 0;
+        newItem.rank = startRank;
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
 
