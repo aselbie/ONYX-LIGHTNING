@@ -67,6 +67,21 @@ exports.fetchArticles = function(data, callback) {
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
 
+        newItem.tweets = [
+          {
+            latitude: 44.968046,
+            longitude: -94.420307
+          },
+          {
+            latitude: 33.755787,
+            longitude: -116.359998
+          },
+          {
+            latitude: 44.92057,
+            longitude: -93.44786
+          }
+        ];
+
         // Create Unique article in DB (uniqueness is determined by the url)
         // This function is meant to be a callback for fetchArticles() in parseRSS.js
         News.create(newItem, function(){});
