@@ -41,7 +41,7 @@ var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
       
     })
   });
-  setTimeout(refresh, 10000);
+  setTimeout(refresh, 100000);
 })(); // IIFE Baby!
 
 // ############ Functions: ###################
