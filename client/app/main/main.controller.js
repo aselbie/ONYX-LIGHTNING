@@ -14,6 +14,8 @@
     $scope.expandedSwitch = false;
     $scope.news = $scope.news || [];
     
+    var changed = false;
+    
     var getArticles = function(){
       MainFactory.get().
         success(function(data, status, headers, config) {
@@ -22,10 +24,15 @@
           for (var i = 0; i < data.length; i ++) {
             if (!$scope.news[i]) {
               $scope.news.push(data[i]);
+              changed = true;
+            }
+            if ($scope.news[i]._id !== data[i]._id) {
+              $scope.news[i] = data[i];
+              changed = true;
             }
           }
           
-          if ($scope.news.length !== scopeLength) {
+          if (changed) {
             $scope.news.sort(function(a, b) {
               return b.rank - a.rank;
             })            
@@ -43,7 +50,7 @@
     
     setInterval(function(){
       getArticles();
-    }, 10000);
+    }, 100000);
     
   }
   
