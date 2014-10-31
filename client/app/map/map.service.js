@@ -35,7 +35,7 @@
 
     function setup(width,height){
       // Create mercator-style map and center it on the page
-      projection = d3.geo.mercator()
+      projection = d3.geo.equirectangular()
         .translate([(width/2), (height/1.5)])
         .scale( width / 3.4 / Math.PI);
 
@@ -100,7 +100,7 @@
           //Reset the country class in the featured country
           d3.select("[title="+"'"+names[k]+"'"+"]").classed("country", true);
           //Reset the country to blue color if it is unfeatured
-          d3.selectAll(".country").style('fill', 'green');
+          d3.selectAll(".country").style('fill', '#DarkSeaGreen');
           //Set the featured country to the color of its sensitivity based on the article score
         }
         for (var kk = 0; kk < names.length; kk++) {
@@ -150,15 +150,15 @@
 
     function draw(topo) {
       /* GRID LINES - Not currently used*/
-      svg.append("path")
-         .datum(graticule)
-         .attr("class", "graticule")
-         .attr("d", path);
+      // svg.append("path")
+      //    .datum(graticule)
+      //    .attr("class", "graticule")
+      //    .attr("d", path);
 
-      g.append("path")
-       .datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
-       .attr("class", "equator")
-       .attr("d", path);
+      // g.append("path")
+      //  .datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
+      //  .attr("class", "equator")
+      //  .attr("d", path);
 
       // country.enter().insert("path")
       //     .attr("id", "articleCountry")
@@ -174,7 +174,7 @@
           .attr("d", path)
           .attr("id", function(d,i) { return d.id; })
           .attr("title", function(d,i) { return d.properties.name; })
-          .style("fill", '#bada55');
+          .style("fill", 'DarkSeaGreen');
       // Offsets for tooltips
       var offsetL = document.getElementById('map').offsetLeft+20;
       var offsetT = document.getElementById('map').offsetTop+10;
@@ -250,6 +250,17 @@
       var latlon = projection.invert(d3.mouse(this));
       console.log(latlon);
     }
+    function highlightTweets (data) {
+      svg.selectAll(".mark")
+          .data(data)
+          .enter()
+          .append("image")
+          .attr('class','mark')
+          .attr('width', 20)
+          .attr('height', 20)
+          .attr("xlink:href",'https://cdn3.iconfinder.com/data/icons/softwaredemo/PNG/24x24/DrawingPin1_Blue.png')
+          .attr("transform", function(d) {return "translate(" + projection([d.long,d.lat]) + ")";});
+    }
 
 
     // Function to add points and text to the map (used in plotting capitals)
@@ -280,6 +291,7 @@
 
     var instance = {
       zoomToCountry: zoomToCountry
+      highlightTweets: highlightTweets
     };
     return instance;
   }
