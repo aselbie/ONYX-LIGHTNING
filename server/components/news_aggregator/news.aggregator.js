@@ -49,7 +49,7 @@ exports.fetchArticles = function(data, callback) {
         console.log(error, 'parser error');
       }
     });
-    
+
     feedparser.on('readable', function() {
       // This is where the action is!
       var stream = this;
@@ -57,7 +57,7 @@ exports.fetchArticles = function(data, callback) {
       var meta = this.meta;
       var item;
 
-      while (item = stream.read()) {
+      while (item === stream.read()) {
         var newItem = {};
         newItem.title = item.title;
         newItem.location = utils.getLocation(item.summary);
