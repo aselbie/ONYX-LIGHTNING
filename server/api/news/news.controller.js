@@ -9,6 +9,7 @@
 
 'use strict';
 var Bluebird = require('bluebird');
+var twitter = require('./../../components/twitter/twitter.js')
 var newsAggregator = require('./../../components/news_aggregator/news.aggregator.js');
 var ranking = require('./../../components/ranking/ranking.js');
 var _ = require('lodash');
@@ -22,7 +23,7 @@ module.exports = {
   destroyAll: destroyAll
 };
 
-var fetchArticles = Bluebird.promisify(newsAggregator.fetchArticles);
+var streamTweets = Bluebird.promisify(twitter.streamTweets);
 var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 
 (function refresh() {
@@ -35,10 +36,13 @@ var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 
       // Remove least relevant articles from the database
       destroyLowScores(articles)
+
+      // Set up tweet stream
+      .then(streamTweets)
       .then(function(articles) {
         console.log('articles.length: %s', articles.length);
       })
-      
+
     })
   });
   setTimeout(refresh, 100000);

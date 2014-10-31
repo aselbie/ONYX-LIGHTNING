@@ -1,5 +1,6 @@
 var Twit = require('twit');
-var keyword = require'keyword-extract');
+var extractor = require('keyword-extractor');
+var _ = require('lodash');
 
 var secrets = {
   consumerKey: 'r9BZJCi6pJG2o2vILW9E6eXNK',
@@ -15,30 +16,85 @@ var T = new Twit({
   access_token_secret: secrets.accessTokenSecret
 });
 
-
+// Returns an array with the three most relevant words from the headline
 function parseHeadline(article) {
   headline = article.title;
-  summary = article.info;
-  tweetWords = [];
+  summary = article.info.split(' ');
 
-  // find three most mentioned keywords in summary
-  keywords.extract('en', headline, function(words){
-    //words = array of keywords from headline
+  // Ensure that location will be included in tweet watch terms
+  tweetWords = [article.location];
 
-    // create object to track each mention of keyword in summary
-    
-  })
+  // Extract keywords from headline
+  var extractedWords = extractor.extract(headline, { language:"english", return_changed_case:true });
 
+  // Create object to track each mention of keyword in summary
+  var keywords = {};
+  _.map(extractedWords, function(word){ keywords[word] = 0; });
+
+  // Iterate over summary to count mentions of each keyword
+  for ( var i = 0; i< summary.length; i++ ) {
+    for (var word in keywords) {
+      if (word === summary[i]){
+        keywords[word] += 1;
+      }
+    }
+  }
+
+  // Sort keywords by highest number of mentions
+  sortedKeys = Object.keys(keywords).sort(function(a,b){return keywords[a] - keywords[b];});
+
+  // Push last two into tweetWords array and don't judge me for doing it this way
+  tweetWords.push(sortedKeys.pop());
+  tweetWords.push(sortedKeys.pop());
+  //tweetWords.push(sortedKeys.pop()); // or three, if you're feeling fancy
+
+  return tweetWords;
 }
 
-function streamTweets( ) {
+function streamTweets(article) {
+  var tweetWords = parseHeadline(article);
+  console.log('TWEETWORDS', tweetWords);
 
+  var stream = T.stream('statuses/filter', { track: tweetWords });
+
+  stream.on('tweet', function (tweet) {
+
+    // Create geodata object
+    if (tweet.coordinates) {
+      var geo = tweet.coordinates.coordinates;
+      var tweetObj = {
+        latitude: geo[1],
+        longitude: geo[0]
+      };
+
+      // Save to database
+      article.tweets.push(tweetObj);
+      article.save();
+      console.log('added to database', tweetObj);
+    }
+
+  });
+
+// or search directly
+
+  // T.get('search/tweets', { q: tweetWords, count: 100 }, function(err, data, response) {
+  //   for (var i = 0; i < data.statuses.length; i++) {
+
+  //     // Add to database
+  //     if (data.statuses[i].coordinants) {
+  //       var geo = data.statuses[i].coordinants.coordinants;
+  //       var tweetObj = {
+  //         latitude: geo[1],
+  //         longitude: geo[0]
+  //       };
+  //       console.log(tweetObj);
+  //     }
+
+  //   };
+  // })
 
 }
-
-
 
 module.exports = {
-  fetchTweets: fetchTweets
   parseHeadline: parseHeadline
 }
