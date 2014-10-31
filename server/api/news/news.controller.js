@@ -66,7 +66,7 @@ function downvote(req, res){
     ranking.calculateScore(article, function(newArticle){
       newArticle.save(function(err){
         if (err){ return handleError(res, err); }
-        return res.json({votes:article.votes});
+        return res.json({votes:article.votes, rank: article.rank});
       });      
     });
   })
