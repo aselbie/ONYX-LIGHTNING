@@ -1,3 +1,7 @@
+module.exports = {
+  streamTweets: streamTweets
+}
+
 var Twit = require('twit');
 var extractor = require('keyword-extractor');
 var _ = require('lodash');
@@ -23,7 +27,7 @@ function parseHeadline(article) {
   var summary = article.info.split(' ');
 
   // Ensure that location will be included in tweet watch terms
-  var tweetWords = [article.location];
+  var tweetWords = _.flatten(article.location)
 
   // Extract keywords from headline
   var extractedWords = extractor.extract(headline, { language:"english", return_changed_case:true });
@@ -52,7 +56,7 @@ function parseHeadline(article) {
   return tweetWords;
 }
 
-function streamTweets(article) {
+function streamArticleTweets(article) {
   var tweetWords = parseHeadline(article);
   console.log('TWEETWORDS', tweetWords);
 
@@ -71,10 +75,9 @@ function streamTweets(article) {
       // Save to database
       article.tweets.push(tweetObj);
       article.save();
-      console.log('added to database', tweetObj);
+      console.log('added to database from', tweetWords);
     }
-
-  });
+  })
 
 // or search directly
 
@@ -92,10 +95,14 @@ function streamTweets(article) {
   //     }
 
   //   };
+
   // })
 
 }
 
-module.exports = {
-  parseHeadline: parseHeadline
+function streamTweets(allArticles, callback){
+  for (var i = 0; i < allArticles.length; i++) {
+    streamArticleTweets(allArticles[i]);
+  };
+  callback(null, allArticles);
 }

@@ -49,7 +49,7 @@ exports.fetchArticles = function(data, callback) {
         console.log(error, 'parser error');
       }
     });
-    
+
     feedparser.on('readable', function() {
       // This is where the action is!
       var stream = this;
