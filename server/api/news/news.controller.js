@@ -19,7 +19,8 @@ module.exports = {
   downvote: downvote,
   index: index,
   show: show,
-  destroyAll: destroyAll
+  destroyAll: destroyAll,
+  findEntryScore: findEntryScore
 };
 
 var fetchArticles = Bluebird.promisify(newsAggregator.fetchArticles);
@@ -45,22 +46,6 @@ var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 })(); // IIFE Baby!
 
 // ############ Functions: ###################
-
-// function calculateScore(article){
-//   var vote = article.votes;
-//   var date = new Date(article.date);
-//   var current = new Date;
-//
-//   var timeDiff = Math.ceil(Math.abs(current.getTime() - date.getTime())/1000);
-//
-//   var order = Math.max(Math.log(Math.abs(vote)));
-//   console.log('order:', order);
-//   var sign = vote > 0 ? 1 : vote < 0 ? -1 : 0;
-//   console.log('sign:', sign);
-//   var articleScore = Math.floor(order + sign * timeDiff / 45000)
-//   console.log('score:', articleScore);
-//
-// }
 
 function upvote(req, res){
   News.findOne({_id: req.params.id}, function(err, article) {
@@ -104,6 +89,12 @@ function show(req, res) {
     return res.json(news);
   });
 };
+
+function findEntryScore(callback) {
+  News.find(function(err, news){
+    callback(news[2].votes);
+  })
+}
 
 function handleError(res, err) {
   return res.send(500, err);
