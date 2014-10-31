@@ -26,11 +26,8 @@ function calculateScore(article, callback){
   var timeDiff = Math.ceil(Math.abs(current.getTime() - date.getTime())/1000);
 
   var order = Math.max(Math.log(Math.abs(vote)));
-  console.log('order:', order);
   var sign = vote > 0 ? 1 : vote < 0 ? -1 : 0;
-  console.log('sign:', sign);
   var articleScore = Math.round((order + sign * timeDiff / 45000) * 10)
-  console.log('score:', articleScore);
-  article.rank = articleScore;
+  article.rank = article.rank + articleScore;
   callback(article);
 }
