@@ -23,6 +23,7 @@ module.exports = {
   destroyAll: destroyAll
 };
 
+var fetchArticles = Bluebird.promisify(newsAggregator.fetchArticles);
 var streamTweets = Bluebird.promisify(twitter.streamTweets);
 var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 
