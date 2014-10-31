@@ -1,3 +1,5 @@
+script: ""
+
 deploy:
   provider: heroku
   app: wicked-broomstick-4132
