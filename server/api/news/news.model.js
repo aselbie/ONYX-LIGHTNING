@@ -17,7 +17,13 @@ var NewsSchema = new Schema({
   date: { 
     type: Date, 
     default: Date.now 
-  }
+  },
+  tweets: [
+    {
+      latitude: Number,
+      longitude: Number
+    }
+  ]
 });
 
 module.exports = mongoose.model('News', NewsSchema);
