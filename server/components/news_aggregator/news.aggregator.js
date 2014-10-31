@@ -9,9 +9,12 @@ exports.fetchArticles = function(data, callback) {
   var startRank;
   
   News.find(function(err, news){
-    news.sort(function(a, b) {return b.votes - a.votes});  
-    
-    startRank = news[2].rank;
+    news.sort(function(a, b) {return b.rank - a.rank});  
+    if (news[2]){
+      startRank = news[2].rank;      
+    } else {
+      startRank = 0;
+    }
 
     for (var key in apiMap) {
       console.log(key);
