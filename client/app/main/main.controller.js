@@ -27,7 +27,7 @@
           
           if ($scope.news.length !== scopeLength) {
             $scope.news.sort(function(a, b) {
-              return b.votes - a.votes;
+              return b.rank - a.rank;
             })            
           };
           

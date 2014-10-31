@@ -26,7 +26,7 @@ var fetchArticles = Bluebird.promisify(newsAggregator.fetchArticles);
 var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 
 (function refresh() {
-
+  // destroyAll(function(){console.log('done')});
   // Grab articles from APIs (Currently only Yahoo is implemented)
   fetchArticles(null, function(){
 
@@ -53,7 +53,7 @@ function upvote(req, res){
     ranking.calculateScore(article, function(newArticle){
       newArticle.save(function(err){
         if (err){ return handleError(res, err); }
-        return res.json({votes:article.votes});
+        return res.json({votes:article.votes, rank:article.rank});
       });      
     });
   })

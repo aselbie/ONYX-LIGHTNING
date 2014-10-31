@@ -8,7 +8,7 @@ var News = require('./../../api/news/news.model.js');
 
 function destroyLowScores(articles, callback){
   var count = 0;
-  articles.sort( function(a,b){ return b.votes - a.votes; });
+  articles.sort( function(a,b){ return b.rank - a.rank; });
   _.forEach(articles, function(article){
     count++;
     if (count >= 20) {
@@ -29,7 +29,7 @@ function calculateScore(article, callback){
   console.log('order:', order);
   var sign = vote > 0 ? 1 : vote < 0 ? -1 : 0;
   console.log('sign:', sign);
-  var articleScore = Math.floor(order + sign * timeDiff / 45000)
+  var articleScore = Math.round((order + sign * timeDiff / 45000) * 10)
   console.log('score:', articleScore);
   article.rank = articleScore;
   callback(article);
