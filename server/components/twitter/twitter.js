@@ -2,6 +2,7 @@ var Twit = require('twit');
 var extractor = require('keyword-extractor');
 var _ = require('lodash');
 
+// should probably put this somewhere else..
 var secrets = {
   consumerKey: 'r9BZJCi6pJG2o2vILW9E6eXNK',
   consumerSecret: 'GrkxfudvizNt9z7B1jWgtgOtbWX7NIGbp27YQ3EDef4BXeici8',
@@ -18,11 +19,11 @@ var T = new Twit({
 
 // Returns an array with the three most relevant words from the headline
 function parseHeadline(article) {
-  headline = article.title;
-  summary = article.info.split(' ');
+  var headline = article.title;
+  var summary = article.info.split(' ');
 
   // Ensure that location will be included in tweet watch terms
-  tweetWords = [article.location];
+  var tweetWords = [article.location];
 
   // Extract keywords from headline
   var extractedWords = extractor.extract(headline, { language:"english", return_changed_case:true });
@@ -41,7 +42,7 @@ function parseHeadline(article) {
   }
 
   // Sort keywords by highest number of mentions
-  sortedKeys = Object.keys(keywords).sort(function(a,b){return keywords[a] - keywords[b];});
+  var sortedKeys = Object.keys(keywords).sort(function(a,b){return keywords[a] - keywords[b];});
 
   // Push last two into tweetWords array and don't judge me for doing it this way
   tweetWords.push(sortedKeys.pop());

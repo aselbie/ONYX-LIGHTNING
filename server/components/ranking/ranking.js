@@ -21,8 +21,8 @@ function destroyLowScores(articles, callback){
 function calculateScore(article, callback){
   var vote = article.votes;
   var date = new Date(article.date);
-  var current = new Date;
-  
+  var current = new Date();
+
   var timeDiff = Math.ceil(Math.abs(current.getTime() - date.getTime())/1000);
 
   var order = Math.max(Math.log(Math.abs(vote)));

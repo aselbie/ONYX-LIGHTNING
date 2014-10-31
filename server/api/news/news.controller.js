@@ -53,12 +53,12 @@ var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 function upvote(req, res){
   News.findOne({_id: req.params.id}, function(err, article) {
     article.votes++;
-    
+
     ranking.calculateScore(article, function(newArticle){
       newArticle.save(function(err){
         if (err){ return handleError(res, err); }
         return res.json({votes:article.votes, rank:article.rank});
-      });      
+      });
     });
   })
 }
@@ -82,7 +82,7 @@ function index(req, res) {
     if(err) { return handleError(res, err); }
     return res.json(200, news);
   });
-};
+}
 
 // Get a single thing
 function show(req, res) {
@@ -91,7 +91,7 @@ function show(req, res) {
     if(!news) { return res.send(404); }
     return res.json(news);
   });
-};
+}
 
 function handleError(res, err) {
   return res.send(500, err);
