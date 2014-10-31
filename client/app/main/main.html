@@ -36,7 +36,7 @@
 <!-- here we need to add tweet highlighter -->
       <ul class="main-menu" ng-class="{expanded: expandedSwitch}">
         <li class="menu-item" ng-repeat="article in news | limitTo: 20">
-          <a ng-controller="MapCtrl" ng-init="zoomToCountry($first)" ng-click="zoomToCountry()" ui-sref=".article({index: $index})">Score: {{article.rank}} {{article.title}}</a>
+          <a ng-controller="MapCtrl" ng-init="zoomToCountry($first)" ng-click="zoomToCountry() highlightTweets()" ui-sref=".article({index: $index})">Score: {{article.rank}} {{article.title}}</a>
         </li>
       </ul>
     </div>

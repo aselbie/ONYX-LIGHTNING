@@ -251,11 +251,11 @@
       console.log(latlon);
     }
     function highlightTweets (data) {
-      svg.selectAll(".mark")
+      svg.selectAll(".tweet")
           .data(data)
           .enter()
           .append("image")
-          .attr('class','mark')
+          .attr('class','tweet')
           .attr('width', 20)
           .attr('height', 20)
           .attr("xlink:href",'https://cdn3.iconfinder.com/data/icons/softwaredemo/PNG/24x24/DrawingPin1_Blue.png')
