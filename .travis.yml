@@ -2,6 +2,7 @@ script: ""
 
 deploy:
   provider: heroku
+  strategy: git
   app: wicked-broomstick-4132
   api_key:
     secure: XvRG4twVmVEQqeM0OZ81Tq45xZ9KuAGEUN1mCYCY9/qiKTUO8PRxP37OtimOJyxumdwb5nKJAEYMYtX/aq2eqj8nSax5scXVOLaONcy1i1UjuzAmhRVN20BZjHuV0I+fK+3xGdLET/GGcI786opgmakhJK6ZU7aN0nVnOeNYy0I=
