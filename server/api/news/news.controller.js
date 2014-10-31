@@ -19,8 +19,7 @@ module.exports = {
   downvote: downvote,
   index: index,
   show: show,
-  destroyAll: destroyAll,
-  findEntryScore: findEntryScore
+  destroyAll: destroyAll
 };
 
 var fetchArticles = Bluebird.promisify(newsAggregator.fetchArticles);
@@ -89,12 +88,6 @@ function show(req, res) {
     return res.json(news);
   });
 };
-
-function findEntryScore(callback) {
-  News.find(function(err, news){
-    callback(news[2].votes);
-  })
-}
 
 function handleError(res, err) {
   return res.send(500, err);

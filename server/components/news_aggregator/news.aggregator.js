@@ -4,7 +4,6 @@ var apiMap = require('./news.source.config.js');
 var utils = require('./news.aggregator.utils.js');
 var sentiment = require('sentiment');
 var News = require('./../../api/news/news.model.js');
-var NewsUtils = require('./../../api/news/news.controller.js');
 
 exports.fetchArticles = function(data, callback) {
   var startRank;
