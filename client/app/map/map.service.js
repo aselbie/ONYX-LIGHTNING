@@ -7,7 +7,7 @@
 
   function MapFactory() {
 
-    /* 
+    /*
      * Code below inserts a d3 map into <div id="map">
      */
 
@@ -35,7 +35,7 @@
 
     function setup(width,height){
       // Create mercator-style map and center it on the page
-      projection = d3.geo.equirectangular()
+      projection = d3.geo.mercator()
         .translate([(width/2), (height/1.5)])
         .scale( width / 3.4 / Math.PI);
 
@@ -248,20 +248,26 @@
     // Geo translation on mouse click in map
     function click() {
       var latlon = projection.invert(d3.mouse(this));
-      console.log(latlon);
-    }
-    function highlightTweets (data) {
-      svg.selectAll(".tweet")
-          .data(data)
-          .enter()
-          .append("image")
-          .attr('class','tweet')
-          .attr('width', 20)
-          .attr('height', 20)
-          .attr("xlink:href",'https://cdn3.iconfinder.com/data/icons/softwaredemo/PNG/24x24/DrawingPin1_Blue.png')
-          .attr("transform", function(d) {return "translate(" + projection([d.long,d.lat]) + ")";});
     }
 
+
+    function highlightTweets () {
+      // Remove current tweets
+      g.selectAll('.tweet').remove();
+
+      // Grab tweet geolocation data from current article database
+      var data = this.article.tweets;
+
+      // Append new tweet data
+      g.selectAll(".tweet")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("r", 2)
+          .attr("fill", "orange")
+          .attr('class','tweet')
+          .attr("transform", function(d) {return "translate(" + projection([d.longitude,d.latitude]) + ")";});
+    }
 
     // Function to add points and text to the map (used in plotting capitals)
     // NOT CURRENTLY BEING USED
@@ -290,7 +296,7 @@
     // }
 
     var instance = {
-      zoomToCountry: zoomToCountry
+      zoomToCountry: zoomToCountry,
       highlightTweets: highlightTweets
     };
     return instance;

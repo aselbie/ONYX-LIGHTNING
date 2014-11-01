@@ -64,6 +64,9 @@ function streamArticleTweets(article) {
 
   stream.on('tweet', function (tweet) {
 
+    /* if you want to store more attributes from the tweet object, here is a great place to do it. Right now we're just storing
+    the geolocation data, but */
+
     // Create geodata object
     if (tweet.coordinates) {
       var geo = tweet.coordinates.coordinates;
