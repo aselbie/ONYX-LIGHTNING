@@ -252,6 +252,8 @@
 
 
     function highlightTweets () {
+      console.log(this.article.tweetQuery);
+
       // Remove current tweets
       g.selectAll('.tweet').remove();
 

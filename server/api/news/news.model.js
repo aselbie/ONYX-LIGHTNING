@@ -18,6 +18,7 @@ var NewsSchema = new Schema({
     type: Date, 
     default: Date.now 
   },
+  tweetQuery: {type: String, default: ''},
   tweets: [
     {
       latitude: Number,

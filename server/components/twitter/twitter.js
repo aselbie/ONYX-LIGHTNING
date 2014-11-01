@@ -58,14 +58,13 @@ function parseHeadline(article) {
 
 function streamArticleTweets(article) {
   var tweetWords = parseHeadline(article);
-  console.log('TWEETWORDS', tweetWords);
 
   var stream = T.stream('statuses/filter', { track: tweetWords });
 
   stream.on('tweet', function (tweet) {
 
     /* if you want to store more attributes from the tweet object, here is a great place to do it. Right now we're just storing
-    the geolocation data, but */
+    the geolocation data, but it's easy to store tweet text, username, etc. Tweet text is tweet.text */
 
     // Create geodata object
     if (tweet.coordinates) {
@@ -76,6 +75,7 @@ function streamArticleTweets(article) {
       };
 
       // Save to database
+      article.tweetQuery = tweetWords.join('');
       article.tweets.push(tweetObj);
       article.save();
       console.log('added to database from', tweetWords);

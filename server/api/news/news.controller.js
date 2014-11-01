@@ -28,7 +28,9 @@ var streamTweets = Bluebird.promisify(twitter.streamTweets);
 var destroyLowScores = Bluebird.promisify(ranking.destroyLowScores);
 
 (function refresh() {
-  // destroyAll(function(){console.log('done')});
+
+  //destroyAll(function(){console.log('done')});
+
   // Grab articles from APIs (Currently only Yahoo is implemented)
   fetchArticles(null, function(){
 
