@@ -31,6 +31,7 @@ exports.fetchArticles = function(data, callback) {
         // console.log(error);
       }
     });
+    
     req.on('response', function (res) {
       var stream = this;
 
@@ -48,7 +49,7 @@ exports.fetchArticles = function(data, callback) {
         console.log(error, 'parser error');
       }
     });
-    
+
     feedparser.on('readable', function() {
       // This is where the action is!
       var stream = this;
@@ -63,24 +64,8 @@ exports.fetchArticles = function(data, callback) {
         newItem.info = item.summary;
         newItem.votes = 0;
         newItem.rank = startRank;
-
         newItem.url = item.link;
         newItem.sentiment = sentiment(newItem.info).score+"";
-
-        newItem.tweets = [
-          {
-            latitude: 44.968046,
-            longitude: -94.420307
-          },
-          {
-            latitude: 33.755787,
-            longitude: -116.359998
-          },
-          {
-            latitude: 44.92057,
-            longitude: -93.44786
-          }
-        ];
 
         // Create Unique article in DB (uniqueness is determined by the url)
         // This function is meant to be a callback for fetchArticles() in parseRSS.js
